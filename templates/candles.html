@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Candlestick Chart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-color: #0d1b2a;
+      --text-color: #ffffff;
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f8fafc;
+      --text-color: #0f172a;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-back {
+      margin-bottom: 20px;
+    }
+
+    /* Toggle Switch */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "🌙";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+    }
+
+    input:checked + .slider {
+      background-color: #4ade80;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+      content: "☀️";
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Theme toggle -->
+  <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" id="modeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <h2 class="mb-4">📈 Ethereum Candlestick Chart</h2>
+  <a href="/" class="btn btn-outline-info btn-back">← Back to Home</a>
+  <div>
+    {{ chart_html|safe }}
+  </div>
+
+  <script>
+    const toggle = document.getElementById('modeToggle');
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+      toggle.checked = saved === "light";
+    });
+
+    toggle.addEventListener("change", () => {
+      const newTheme = toggle.checked ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    });
+  </script>
+</body>
+</html>

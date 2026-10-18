@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto News</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    :root[data-theme='light'] {
+      --bg-color: #f8fafc;
+      --text-color: #1f2937;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --link-color: #1d4ed8;
+    }
+
+    :root[data-theme='dark'] {
+      --bg-color: #0f172a;
+      --text-color: #f1f5f9;
+      --card-bg: #1e293b;
+      --card-shadow: rgba(255, 255, 255, 0.05);
+      --link-color: #60a5fa;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .news-container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .news-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 20px var(--card-shadow);
+      margin-bottom: 20px;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+
+    .news-card:hover {
+      transform: scale(1.01);
+    }
+
+    .news-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .news-title a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .news-title a:hover {
+      text-decoration: underline;
+    }
+
+    .news-meta {
+      font-size: 0.85rem;
+      color: gray;
+      margin-top: 5px;
+    }
+
+    .back-btn {
+      margin-bottom: 20px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      z-index: 1000;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+  </style>
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i id="theme-icon" class="fas fa-moon"></i>
+  </button>
+
+  <div class="news-container">
+    <h2 class="mb-4"><i class="fas fa-newspaper"></i> Real-Time Crypto News</h2>
+    <a href="/" class="btn btn-outline-info back-btn"><i class="fas fa-home"></i> Back to Home</a>
+
+    <button class="btn btn-outline-info mb-3" onclick="location.reload()">
+  <i class="fas fa-sync-alt"></i> Refresh News
+</button>
+
+
+    {% if articles %}
+      {% for article in articles %}
+        <div class="news-card">
+          <div class="news-title">
+            <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
+          </div>
+          {% if article.source %}
+            <div class="news-meta">Source: {{ article.source }} | {{ article.pubDate }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No news articles available right now.</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateIcon(newTheme);
+    }
+
+    function updateIcon(theme) {
+      const icon = document.getElementById('theme-icon');
+      icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      updateIcon(saved);
+    });
+  </script>
+</body>
+</html>
